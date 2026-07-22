@@ -1,3 +1,4 @@
+const filterSearch = document.getElementById('filter-search');
 const API_BASE = '/api';
 const TOKEN_KEY = 'clinic_doctor_token';
 
@@ -68,6 +69,9 @@ async function loadAppointments() {
   if (!token) return showLogin();
 
   const params = new URLSearchParams();
+   if (filterSearch.value) {
+  params.set('search', filterSearch.value);
+    }
   if (filterDate.value) params.set('date', filterDate.value);
   if (filterStatus.value) params.set('status', filterStatus.value);
 
@@ -181,10 +185,17 @@ clearFiltersBtn.addEventListener('click', () => {
 });
 filterDate.addEventListener('change', loadAppointments);
 filterStatus.addEventListener('change', loadAppointments);
-
+filterSearch.addEventListener('input', loadAppointments);
 // -------- التحقق من الجلسة عند فتح الصفحة --------
 if (getToken()) {
   showDashboard();
 } else {
   showLogin();
+}
+const patientsBtn = document.getElementById("patients-btn");
+
+if (patientsBtn) {
+    patientsBtn.addEventListener("click", () => {
+        window.location.href = "/patients.html";
+    });
 }

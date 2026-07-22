@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<title>حجز موعد</title>
+</head>
+
+<body>
+
+
+<h2>حجز موعد أسنان</h2>
+
+
+<input id="name" placeholder="اسم المريض">
+
+<br>
+
+<input id="phone" placeholder="الهاتف">
+
+<br>
+
+<input id="date" type="date">
+
+<br>
+
+<input id="time" placeholder="الوقت">
+
+
+<br><br>
+
+<button onclick="book()">
+حجز
+</button>
+
+
+<p id="msg"></p>
+
+
+
+<script>
+
+async function book(){
+
+// إنشاء المريض
+
+let patient = await fetch(
+"/api/patients",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+name:
+document.getElementById("name").value,
+
+phone:
+document.getElementById("phone").value
+
+})
+});
+
+
+let p = await patient.json();
+
+
+// إنشاء الموعد
+
+let appointment = await fetch(
+"/api/appointments",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+patient_id:p.id,
+
+date:
+document.getElementById("date").value,
+
+time:
+document.getElementById("time").value
+
+})
+
+});
+
+
+let result = await appointment.json();
+
+
+document.getElementById("msg").innerHTML =
+JSON.stringify(result);
+
+
+}
+
+</script>
+
+
+</body>
+</html>

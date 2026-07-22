@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<title>ملف المريض</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    padding:30px;
+}
+
+.card{
+    border:1px solid #ddd;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+button{
+    padding:8px 15px;
+    cursor:pointer;
+}
+
+input,textarea{
+    width:100%;
+    padding:10px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h1>ملف المريض</h1>
+
+
+<div class="card" id="patient-info">
+جار تحميل البيانات...
+</div>
+
+
+
+<h2>المواعيد</h2>
+
+
+<table>
+
+<thead>
+<tr>
+<th>التاريخ</th>
+<th>الوقت</th>
+<th>الخدمة</th>
+<th>الحالة</th>
+</tr>
+</thead>
+
+
+<tbody id="appointments">
+
+</tbody>
+
+
+</table>
+
+
+
+<hr>
+
+
+<h2>السجل الطبي</h2>
+
+
+<div id="medical-records">
+لا توجد سجلات طبية
+</div>
+
+
+
+<hr>
+
+
+<h2>إضافة سجل طبي</h2>
+
+
+<form id="medical-form">
+
+
+<textarea
+id="diagnosis"
+placeholder="التشخيص"
+rows="3"></textarea>
+
+
+<br><br>
+
+
+<textarea
+id="treatment"
+placeholder="العلاج"
+rows="3"></textarea>
+
+
+<br><br>
+
+
+<textarea
+id="prescription"
+placeholder="الدواء"
+rows="3"></textarea>
+
+
+<br><br>
+
+
+<textarea
+id="notes"
+placeholder="ملاحظات"
+rows="3"></textarea>
+
+
+<br><br>
+
+
+<button type="submit">
+حفظ السجل الطبي
+</button>
+
+
+</form>
+
+
+
+<hr>
+
+
+<h2>💰 الفواتير</h2>
+
+
+<div id="invoices">
+لا توجد فواتير
+</div>
+
+
+
+<hr>
+
+
+<h2>➕ إنشاء فاتورة</h2>
+
+
+<form id="invoice-form">
+
+
+<input
+type="number"
+id="total_amount"
+placeholder="قيمة الفاتورة"
+step="0.01"
+required>
+
+
+<br><br>
+
+
+<button type="submit">
+إنشاء فاتورة
+</button>
+
+
+</form>
+
+
+
+<script src="js/patient.js"></script>
+
+
+</body>
+
+</html>

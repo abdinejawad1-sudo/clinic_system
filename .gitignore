@@ -1,7 +1,10 @@
 node_modules/
 .env
+
 db/clinic.db
 db/clinic.db-journal
 db/clinic.db-wal
 db/clinic.db-shm
+clinic.db
+
 *.log

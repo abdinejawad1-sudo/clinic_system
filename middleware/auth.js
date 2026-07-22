@@ -1,20 +1,41 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-function requireDoctorAuth(req, res, next) {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+function auth(req, res, next) {
 
-  if (!token) {
-    return res.status(401).json({ error: 'يجب تسجيل الدخول للوصول إلى هذه البيانات' });
-  }
+    const header = req.headers.authorization;
 
-  try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    req.doctor = payload;
-    next();
-  } catch (err) {
-    return res.status(401).json({ error: 'انتهت صلاحية الجلسة، الرجاء تسجيل الدخول مجدداً' });
-  }
+    if (!header) {
+        return res.status(401).json({
+            error: "غير مصرح"
+        });
+    }
+
+    const token = header.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({
+            error: "التوكن غير موجود"
+        });
+    }
+
+    try {
+
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        req.user = decoded;
+
+        next();
+
+    } catch (err) {
+
+        return res.status(401).json({
+            error: "التوكن غير صالح"
+        });
+
+    }
 }
 
-module.exports = { requireDoctorAuth };
+module.exports = auth;

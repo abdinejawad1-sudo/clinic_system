@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Patient API</title>
+</head>
+
+<body>
+
+<h2>Add Patient</h2>
+
+<input id="name" placeholder="Name">
+<input id="phone" placeholder="Phone">
+<input id="age" placeholder="Age">
+
+<button onclick="addPatient()">
+Add
+</button>
+
+
+<script>
+
+function addPatient(){
+
+    fetch("/api/patients", {
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body: JSON.stringify({
+
+            name: document.getElementById("name").value,
+
+            phone: document.getElementById("phone").value,
+
+            age: document.getElementById("age").value
+
+        })
+
+    })
+
+    .then(res=>res.json())
+
+    .then(data=>{
+
+        alert(JSON.stringify(data));
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

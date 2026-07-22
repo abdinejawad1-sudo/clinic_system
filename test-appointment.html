@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Appointment</title>
+</head>
+
+<body>
+
+<h2>Add Appointment</h2>
+
+<input id="patient_id" placeholder="Patient ID">
+<input id="date" placeholder="Date (YYYY-MM-DD)">
+<input id="time" placeholder="Time">
+
+<button onclick="addAppointment()">
+Add Appointment
+</button>
+
+
+<script>
+
+function addAppointment(){
+
+    fetch("/api/appointments", {
+
+        method: "POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body: JSON.stringify({
+
+            patient_id: document.getElementById("patient_id").value,
+
+            date: document.getElementById("date").value,
+
+            time: document.getElementById("time").value
+
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        alert(JSON.stringify(data));
+
+    })
+
+    .catch(err => {
+
+        alert(err);
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

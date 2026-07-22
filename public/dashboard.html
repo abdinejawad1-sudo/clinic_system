@@ -39,6 +39,9 @@
     <div class="container dash-header-inner">
       <span class="brand">عيادة <strong>ابتسامة</strong> — لوحة الطبيب</span>
       <button id="logout-btn" class="btn btn-ghost btn-sm">تسجيل الخروج</button>
+<button id="patients-btn">
+    المرضى
+</button>
     </div>
   </header>
 
@@ -55,6 +58,13 @@
           <option value="confirmed">مؤكد</option>
           <option value="done">تم الكشف</option>
           <option value="cancelled">ملغى</option>
+<div class="filter-group">
+  <label for="filter-search">بحث</label>
+  <input 
+    type="text" 
+    id="filter-search" 
+    placeholder="اسم المريض أو الهاتف">
+</div>
         </select>
       </div>
       <button id="refresh-btn" class="btn btn-ghost btn-sm">تحديث</button>
