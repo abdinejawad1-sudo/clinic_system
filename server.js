@@ -1,4 +1,5 @@
 require('dotenv').config();
+const notificationsRoutes = require('./routes/notifications');
 const invoicesRoutes = require("./routes/invoices");
 const medicalRoutes = require("./routes/medicalRecords");
 const express = require('express');
@@ -28,7 +29,7 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use("/api/medical-records", medicalRoutes);
 
 // API
-
+app.use('/api/notifications', notificationsRoutes);
 app.use('/api/auth', authRoutes);
 
 app.use('/api/patients', patientsRoutes);

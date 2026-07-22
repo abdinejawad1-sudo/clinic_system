@@ -199,3 +199,129 @@ if (patientsBtn) {
         window.location.href = "/patients.html";
     });
 }
+async function loadNotifications(){
+
+    const token = localStorage.getItem("clinic_doctor_token");
+
+
+    const res = await fetch(
+        "/api/notifications",
+        {
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        }
+    );
+
+
+    const data = await res.json();
+
+
+    const list =
+    document.getElementById("notifications-list");
+
+
+    if(data.length === 0){
+
+        list.innerHTML =
+        "لا توجد مواعيد قريبة";
+
+        return;
+    }
+
+window.notifications = data;
+  list.innerHTML = data.map(n=>`
+
+<div style="
+    padding:10px;
+    border-bottom:1px solid #ddd;
+">
+
+🔔 موعد قريب
+
+<br>
+
+👤 ${n.patient_name}
+
+<br>
+
+📅 ${n.appt_date}
+
+<br>
+
+⏰ ${n.appt_time}
+
+<br><br>
+
+<button onclick="sendReminder(${n.id})">
+📱 إرسال تذكير واتساب
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+// فتح وإغلاق القائمة
+
+document
+.getElementById("notification-btn")
+.addEventListener("click",()=>{
+
+    const box =
+    document.getElementById("notifications-list");
+
+
+    box.style.display =
+    box.style.display==="none"
+    ?
+    "block"
+    :
+    "none";
+
+});
+
+
+// تحديث كل دقيقة
+
+loadNotifications();
+
+setInterval(
+    loadNotifications,
+    60000
+);
+function sendReminder(id){
+
+    const appointment = 
+    window.notifications.find(n => n.id == id);
+
+
+    if(!appointment){
+        alert("الموعد غير موجود");
+        return;
+    }
+
+
+    let phone = appointment.phone;
+
+
+    let message = 
+`مرحباً ${appointment.patient_name} 👋
+هذا تذكير بموعدك في عيادة الأسنان 🦷
+
+📅 التاريخ: ${appointment.appt_date}
+⏰ الوقت: ${appointment.appt_time}
+
+شكراً لزيارتكم.`;
+
+
+    const url =
+    `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+
+    window.open(url,"_blank");
+
+
+}
