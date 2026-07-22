@@ -35,6 +35,10 @@ app.use('/api/patients', patientsRoutes);
 
 app.use('/api/appointments', appointmentsRoutes);
 app.use("/api/invoices", invoicesRoutes);
+
+app.get('/', (req,res)=>{
+    res.sendFile(path.join(__dirname,'public','index.html'));
+});
 app.use(errorHandler);
 
 app.get('/api/health',(req,res)=>{
