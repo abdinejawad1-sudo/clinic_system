@@ -165,8 +165,9 @@ router.get("/available", async(req,res)=>{
         const result = await pool.query(
             `
             SELECT appt_time
-            FROM appointments
-            WHERE appt_date=$1
+             FROM appointments
+             WHERE appt_date=$1
+             AND status='confirmed'
             `,
             [
                 date
