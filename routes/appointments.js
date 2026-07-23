@@ -79,45 +79,65 @@ router.post("/", async (req,res)=>{
 
 // ================= عرض المواعيد =================
 
-router.get("/", auth, async(req,res)=>{
+// ================= عرض المواعيد =================
 
-    try{
+router.get("/", auth, async (req, res) => {
+
+    try {
 
         const search = req.query.search || "";
+        const date = req.query.date || "";
+        const status = req.query.status || "";
 
-
-        const result = await pool.query(
-            `
+        let sql = `
             SELECT
-            appointments.*,
-            patients.name AS patient_name,
-            patients.phone
-
+                appointments.*,
+                patients.name AS patient_name,
+                patients.phone
             FROM appointments
-
             JOIN patients
-            ON patients.id = appointments.patient_id
+                ON patients.id = appointments.patient_id
+            WHERE
+                (
+                    patients.name ILIKE $1
+                    OR patients.phone ILIKE $1
+                )
+              
+        `;
 
-            WHERE patients.name ILIKE $1
-            OR patients.phone ILIKE $1
+        const values = [`%${search}%`];
 
-            ORDER BY appt_date, appt_time
-            `,
-            [
-                `%${search}%`
-            ]
-        );
+        if (date) {
+            values.push(date);
+            sql += ` AND appointments.appt_date = $${values.length}`;
+        }
 
+        if (status) {
+
+    values.push(status);
+    sql += ` AND appointments.status = $${values.length}`;
+
+} else {
+
+    sql += ` AND appointments.status <> 'done'`;
+
+}
+
+        sql += `
+            ORDER BY appointments.appt_date,
+                     appointments.appt_time
+        `;
+
+        const result = await pool.query(sql, values);
 
         res.json({
             appointments: result.rows
         });
 
-
-    }catch(err){
+    } catch (err) {
 
         res.status(500).json({
-            error:err.message
+            error: err.message
         });
 
     }

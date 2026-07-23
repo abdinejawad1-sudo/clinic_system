@@ -1,7 +1,7 @@
 const filterSearch = document.getElementById('filter-search');
 const API_BASE = '/api';
 const TOKEN_KEY = 'clinic_doctor_token';
-
+let lastNotificationCount = 0;
 const loginScreen = document.getElementById('login-screen');
 const dashboardScreen = document.getElementById('dashboard-screen');
 const loginForm = document.getElementById('login-form');
@@ -49,6 +49,16 @@ loginForm.addEventListener('submit', async (e) => {
       loginMessage.textContent = data.error || 'فشل تسجيل الدخول';
       return;
     }
+if(
+    data.length > 0 &&
+    data.length !== lastNotificationCount
+){
+
+    playNotificationSound();
+
+    lastNotificationCount = data.length;
+
+}
 
     setToken(data.token);
     loginForm.reset();
@@ -88,6 +98,23 @@ async function loadAppointments() {
     }
 
     const data = await res.json();
+const count =
+document.getElementById("notification-count");
+
+
+if(count){
+
+    if(data.length > 0){
+
+        count.innerHTML = `(${data.length})`;
+
+    }else{
+
+        count.innerHTML = "";
+
+    }
+
+}
     renderStats(data.appointments || []);
     renderTable(data.appointments || []);
   } catch (err) {
@@ -325,3 +352,48 @@ function sendReminder(id){
 
 
 }
+function playNotificationSound(){
+
+    const AudioContext =
+    window.AudioContext || window.webkitAudioContext;
+
+
+    const context = new AudioContext();
+
+
+    const oscillator = context.createOscillator();
+
+    const gain = context.createGain();
+
+
+    oscillator.type = "sine";
+
+    oscillator.frequency.value = 900;
+
+
+    gain.gain.value = 0.3;
+
+
+    oscillator.connect(gain);
+
+    gain.connect(context.destination);
+
+
+    oscillator.start();
+
+
+    setTimeout(()=>{
+
+        oscillator.stop();
+
+    },700);
+
+}
+// تحميل أول مرة
+loadAppointments();
+
+// تحديث تلقائي كل 10 ثوانٍ
+setInterval(() => {
+    loadAppointments();
+    loadNotifications();
+}, 60000);

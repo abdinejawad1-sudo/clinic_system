@@ -1,6 +1,15 @@
 .hidden { display: none !important; }
 
 .dashboard-body { background: var(--mint-soft); min-height: 100vh; }
+.logo{
+
+display:flex;
+
+justify-content:center;
+
+margin-bottom:20px;
+
+}
 
 /* -------- شاشة تسجيل الدخول -------- */
 .login-screen {
@@ -113,6 +122,15 @@
 .badge-confirmed { background: rgba(20,101,91,0.12); color: var(--teal-dark); }
 .badge-done { background: rgba(217,164,65,0.18); color: var(--gold-dark); }
 .badge-cancelled { background: rgba(193,72,59,0.12); color: var(--rose); }
+#notification-count{
+
+    background:red;
+    color:white;
+    border-radius:50%;
+    padding:3px 8px;
+    font-size:12px;
+
+}
 
 .row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .row-actions button {

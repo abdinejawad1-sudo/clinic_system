@@ -34,15 +34,13 @@ router.get("/", auth, async (req, res) => {
         const now = new Date();
 
         const notifications = result.rows.filter(appt => {
+const appointmentTime = new Date(
+    `${appt.appt_date}T${appt.appt_time}:00+03:00`
+);
 
 
-            const appointmentTime = new Date(
-                `${appt.appt_date}T${appt.appt_time}:00`
-            );
-
-
-            const diff =
-            (appointmentTime - now) / (1000 * 60);
+const diff =
+(appointmentTime - now) / (1000 * 60);
 
 
             // المواعيد خلال الساعة القادمة
