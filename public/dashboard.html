@@ -6,6 +6,129 @@
 <title>لوحة تحكم الطبيب | عيادة ابتسامة</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+/* نافذة الحجز */
+
+.modal{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,.7);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+z-index:9999;
+
+}
+
+
+.modal-box{
+
+background:#102542;
+
+width:90%;
+max-width:500px;
+
+padding:30px;
+
+border-radius:20px;
+
+display:flex;
+flex-direction:column;
+
+gap:15px;
+
+box-shadow:0 20px 50px #000;
+
+}
+
+
+.modal-box h2{
+
+text-align:center;
+color:#4da6ff;
+
+}
+
+
+.modal-box input{
+
+padding:15px;
+
+border-radius:10px;
+
+border:1px solid #555;
+
+background:#fff;
+
+color:#000;
+
+font-size:18px;
+
+}
+
+
+.modal-buttons{
+
+display:flex;
+
+gap:15px;
+
+}
+
+
+.modal-buttons button{
+
+flex:1;
+
+padding:15px;
+
+border:none;
+
+border-radius:12px;
+
+cursor:pointer;
+
+font-size:18px;
+
+}
+
+
+#save-appointment{
+
+background:#25D366;
+
+color:white;
+
+}
+
+
+#close-modal{
+
+background:#ff6b6b;
+
+color:white;
+
+}
+
+
+
+@media(max-width:600px){
+
+.modal-box{
+
+width:95%;
+
+padding:20px;
+
+}
+
+}
 /* ===== RESET & BASE ===== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -193,6 +316,9 @@ body {
       <span class="brand">عيادة <strong>ابتسامة</strong> — لوحة الطبيب</span>
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
         <button id="patients-btn">المرضى</button>
+       <button id="new-appointment-btn">
+         ➕ حجز جديد
+          </button>
         
         <div id="notification-box">
           <button id="notification-btn">🔔 الإشعارات <span id="notification-count"></span></button>
@@ -250,7 +376,68 @@ body {
     </div>
   </main>
 </div>
+ <!-- نافذة حجز جديد -->
 
+<div id="appointment-modal" class="modal hidden">
+
+<div class="modal-box">
+
+<h2>
+➕ إضافة حجز جديد
+</h2>
+
+
+<label>اسم المريض</label>
+<input id="new-name" type="text">
+
+
+<label>رقم الهاتف</label>
+<input id="new-phone" type="text">
+
+
+<label>التاريخ</label>
+<input id="new-date" type="date">
+
+
+<label>الوقت</label>
+
+<select id="new-time">
+    <option value="">اختر التاريخ أولاً</option>
+</select>
+
+
+<label>الخدمة</label>
+
+<select id="new-service">
+
+<option value="كشف عام">كشف عام</option>
+<option value="تنظيف وتلميع">تنظيف وتلميع</option>
+<option value="تبييض الأسنان">تبييض الأسنان</option>
+<option value="تقويم الأسنان">تقويم الأسنان</option>
+<option value="حشوات">حشوات</option>
+<option value="زراعة أسنان">زراعة أسنان</option>
+<option value="طوارئ">طوارئ / ألم حاد</option>
+
+</select>
+
+
+<div class="modal-buttons">
+
+<button id="save-appointment">
+حفظ الحجز
+</button>
+
+
+<button id="close-modal">
+إلغاء
+</button>
+
+</div>
+
+
+</div>
+
+</div>
 <script src="js/dashboard.js"></script>
 </body>
 </html>

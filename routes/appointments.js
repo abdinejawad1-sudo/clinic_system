@@ -6,6 +6,75 @@ const auth = require("../middleware/auth");
 
 
 // ================= إضافة موعد =================
+router.get("/available-times", async(req,res)=>{
+
+
+    const {date}=req.query;
+
+
+    const allTimes=[
+        "09:00",
+        "09:30",
+        "10:00",
+        "10:30",
+        "11:00",
+        "11:30",
+        "12:00",
+        "12:30",
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+        "16:30",
+        "17:00"
+    ];
+
+
+
+    try{
+
+
+        const booked = await pool.query(
+
+        `
+        SELECT appt_time
+        FROM appointments
+        WHERE appt_date=$1
+        `,
+
+        [date]
+
+        );
+
+
+        const bookedTimes =
+        booked.rows.map(row=>row.appt_time);
+
+
+
+        const available =
+        allTimes.filter(
+            t=> !bookedTimes.includes(t)
+        );
+
+
+        res.json(available);
+
+
+
+    }catch(err){
+
+        res.status(500).json({
+            error:err.message
+        });
+
+    }
+
+
+});
 
 router.post("/", async (req,res)=>{
 

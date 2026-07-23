@@ -1,3 +1,49 @@
+const newDate = document.getElementById("new-date");
+const newTime = document.getElementById("new-time");
+
+
+newDate.addEventListener("change", async ()=>{
+
+
+    const date = newDate.value;
+
+
+    if(!date){
+        return;
+    }
+
+
+    const res = await fetch(`/api/appointments/available-times?date=${date}`);
+
+    const times = await res.json();
+
+
+    newTime.innerHTML="";
+
+
+    if(times.length === 0){
+
+        newTime.innerHTML =
+        `<option>لا يوجد أوقات متاحة</option>`;
+
+        return;
+
+    }
+
+
+    times.forEach(time=>{
+
+        const option=document.createElement("option");
+
+        option.value=time;
+        option.textContent=time;
+
+        newTime.appendChild(option);
+
+    });
+
+
+});
 const filterSearch = document.getElementById('filter-search');
 const API_BASE = '/api';
 const TOKEN_KEY = 'clinic_doctor_token';
@@ -447,5 +493,164 @@ function showNewAppointmentAlert(){
         alertBox.remove();
 
     },5000);
+
+}
+
+// ================= حفظ الحجز الجديد =================
+
+const saveAppointmentBtn = document.getElementById("save-appointment");
+
+
+if(saveAppointmentBtn){
+
+saveAppointmentBtn.addEventListener("click", async ()=>{
+
+
+    const patientName =
+    document.getElementById("new-name").value.trim();
+
+
+    const phone =
+    document.getElementById("new-phone").value.trim();
+
+
+    const date =
+    document.getElementById("new-date").value;
+
+
+    const time =
+    document.getElementById("new-time").value;
+
+
+    const service =
+    document.getElementById("new-service").value;
+
+
+
+    if(!patientName || !phone || !date || !time){
+
+        alert("يرجى تعبئة جميع البيانات");
+        return;
+
+    }
+
+
+    try{
+
+
+        const token = localStorage.getItem("clinic_doctor_token");
+
+
+        const res = await fetch("/api/appointments",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:`Bearer ${token}`
+            },
+
+
+            body:JSON.stringify({
+
+                patientName,
+                phone,
+                date,
+                time,
+                service
+
+            })
+
+        });
+
+
+
+        const data = await res.json();
+
+
+
+        if(!res.ok){
+
+            alert(data.error || "حدث خطأ");
+
+            return;
+
+        }
+
+
+
+        alert("✅ تم إضافة الحجز بنجاح");
+
+
+
+        document.getElementById("appointment-modal")
+        .classList.add("hidden");
+
+
+
+        document.getElementById("new-name").value="";
+        document.getElementById("new-phone").value="";
+        document.getElementById("new-date").value="";
+        document.getElementById("new-time").value="";
+        document.getElementById("new-service").value="";
+
+
+        loadAppointments();
+
+
+
+    }catch(err){
+
+        console.log(err);
+
+        alert("خطأ في الاتصال بالسيرفر");
+
+    }
+
+
+});
+
+
+}
+// ================= فتح نافذة حجز جديد =================
+
+const appointmentModal = document.getElementById("appointment-modal");
+const newAppointmentBtn = document.getElementById("new-appointment-btn");
+const closeModalBtn = document.getElementById("close-modal");
+
+
+if (newAppointmentBtn && appointmentModal) {
+
+    newAppointmentBtn.addEventListener("click", function(){
+
+        appointmentModal.classList.remove("hidden");
+
+    });
+
+}
+
+
+if (closeModalBtn && appointmentModal) {
+
+    closeModalBtn.addEventListener("click", function(){
+
+        appointmentModal.classList.add("hidden");
+
+    });
+
+}
+
+
+if (appointmentModal) {
+
+    appointmentModal.addEventListener("click", function(e){
+
+        if(e.target === appointmentModal){
+
+            appointmentModal.classList.add("hidden");
+
+        }
+
+    });
 
 }
