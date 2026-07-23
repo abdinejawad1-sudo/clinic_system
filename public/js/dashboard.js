@@ -1,7 +1,8 @@
 const filterSearch = document.getElementById('filter-search');
 const API_BASE = '/api';
 const TOKEN_KEY = 'clinic_doctor_token';
-let lastNotificationCount = 0;
+let lastAppointmentsCount = 0;
+let firstLoad = true;
 const loginScreen = document.getElementById('login-screen');
 const dashboardScreen = document.getElementById('dashboard-screen');
 const loginForm = document.getElementById('login-form');
@@ -98,14 +99,26 @@ async function loadAppointments() {
     }
 
     const data = await res.json();
+const appointments = data.appointments || [];
+
+if(!firstLoad && appointments.length > lastAppointmentsCount){
+
+    playNotificationSound();
+
+    showNewAppointmentAlert();
+
+}
+
+lastAppointmentsCount = appointments.length;
+firstLoad = false;
 const count =
 document.getElementById("notification-count");
 
 
 if(count){
 
-    if(data.length > 0){
-
+  
+  if(data.appointments.length > 0){
         count.innerHTML = `(${data.length})`;
 
     }else{
@@ -147,7 +160,11 @@ function renderTable(appointments) {
 
   tbody.innerHTML = appointments.map(appt => `
     <tr data-id="${appt.id}">
-      <td>${escapeHtml(appt.patient_name)}</td>
+      <td>
+<a href="patient.html?id=${appt.patient_id}">
+${escapeHtml(appt.patient_name)}
+</a>
+</td>
       <td>${escapeHtml(appt.phone)}</td>
       <td>${appt.appt_date}</td>
       <td>${appt.appt_time}</td>
@@ -397,3 +414,36 @@ setInterval(() => {
     loadAppointments();
     loadNotifications();
 }, 60000);
+function showNewAppointmentAlert(){
+
+    const alertBox = document.createElement("div");
+
+    alertBox.innerHTML = `
+    🔔 تم حجز موعد جديد
+    `;
+
+
+    alertBox.style.position="fixed";
+    alertBox.style.top="20px";
+    alertBox.style.right="20px";
+    alertBox.style.background="#1976d2";
+    alertBox.style.color="white";
+    alertBox.style.padding="15px 25px";
+    alertBox.style.borderRadius="15px";
+    alertBox.style.zIndex="9999";
+    alertBox.style.fontSize="18px";
+
+
+    alertBox.classList.add("new-alert");
+
+
+    document.body.appendChild(alertBox);
+
+
+    setTimeout(()=>{
+
+        alertBox.remove();
+
+    },5000);
+
+}

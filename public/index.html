@@ -6,117 +6,473 @@
 <title>عيادة ابتسامة | طب وتجميل الأسنان</title>
 <meta name="description" content="عيادة أسنان متكاملة - احجز موعدك أونلاين بسهولة">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500;600;700&family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- إضافة مكتبة AOS للأنيميشن عند التمرير -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Tajawal', 'Montserrat', sans-serif;
+  background: #0a192f; /* خلفية داكنة فخمة للموقع بالكامل */
+  color: #f0f4f8; /* نص أبيض ناصع للوضوح */
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOutUp {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-40px); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+.animate-in { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; opacity: 0; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+/* ===== CONTAINERS ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* ========================================= */
+/* انتقال الصفحات (Page Transition) */
+/* ========================================= */
+.transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0a192f; /* نفس لون خلفية الموقع */
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+}
+.transition-overlay.active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+/* ========================================= */
+/* الجزء الأول: بطاقة العيادة (السن الزجاجي) */
+/* ========================================= */
+.clinic-card {
+  background: #ffffff;
+  border-radius: 30px;
+  padding: 30px 50px;
+  margin: 20px auto;
+  width: calc(100% - 40px);
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  animation: fadeIn 1s ease;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.2rem; /* تكبير الشعار قليلاً */
+  color: #1e3c72;
+  text-decoration: none;
+}
+.logo svg { width: 32px; height: 32px; fill: #1e3c72; }
+.main-nav {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+}
+.main-nav a {
+  text-decoration: none;
+  color: #1e3c72;
+  font-weight: 700; /* جعل الخط عريضاً */
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: 0.3s;
+}
+.main-nav a:hover { color: #4da6ff; }
+.header-btn {
+  background: #1e3c72;
+  padding: 10px 24px;
+  border-radius: 30px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+}
+.header-btn:hover { background: #2a5298; transform: translateY(-2px); }
+
+/* ===== HERO ===== */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 0 60px;
+  position: relative;
+  flex: 1;
+}
+.hero-copy { flex: 1; max-width: 40%; }
+.hero-copy h1 {
+  font-size: 3.5rem; /* تكبير العنوان الرئيسي */
+  line-height: 1.1;
+  color: #0b1e3b;
+  margin-bottom: 25px;
+  font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
+}
+.hero-copy p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 320px;
+  font-weight: 500;
+}
+.hero-visual {
+  flex: 1.2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.hero-visual img {
+  width: 400px;
+  height: auto;
+  filter: drop-shadow(0 20px 40px rgba(0,100,200,0.3));
+  animation: float 4s ease-in-out infinite;
+  mix-blend-mode: multiply;
+  object-fit: contain;
+}
+.hero-actions {
+  flex: 1;
+  max-width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.hero-actions .btn-primary {
+  background: #1e3c72;
+  color: white;
+  padding: 16px 40px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+}
+.hero-actions .btn-primary:hover {
+  background: #2a5298;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(30, 60, 114, 0.4);
+}
+.hero-actions .btn-ghost {
+  background: transparent;
+  color: #1e3c72;
+  border: 2px solid #1e3c72;
+  padding: 16px 40px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: 0.3s;
+  text-align: center;
+}
+.hero-actions .btn-ghost:hover { background: #eef2f7; transform: translateY(-2px); }
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 40px;
+  width: 100%;
+}
+.hero-stats div { display: flex; flex-direction: column; }
+.hero-stats strong { font-family: 'Montserrat', sans-serif; font-size: 2rem; color: #0b1e3b; font-weight: 800; }
+.hero-stats span { font-size: 0.95rem; color: #555; font-weight: 600; }
+.hero-copy .eyebrow { color: #4da6ff; font-weight: 700; margin-bottom: 15px; display: block; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 2px; }
+
+/* ========================================= */
+/* الخدمات */
+/* ========================================= */
+#services {
+  padding: 80px 0;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+.service-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  transition: 0.3s;
+}
+.service-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.1);
+}
+.service-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+.service-card h3 { color: #fff; margin-bottom: 10px; font-size: 1.3rem; }
+.service-card p { color: #d1d8e0; line-height: 1.6; font-size: 0.95rem; }
+
+/* ========================================= */
+/* الأقسام العربية */
+/* ========================================= */
+.section { padding: 80px 0; }
+.section-title {
+  font-size: 2.8rem;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.eyebrow {
+  display: inline-block;
+  color: #4da6ff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+.alt { background: rgba(255,255,255,0.05); border-radius: 30px; margin: 20px auto; max-width: 1300px; padding: 80px 50px; }
+
+.about-inner, .booking-inner { display: flex; gap: 50px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.about-copy { flex: 1; }
+.about-copy p { color: #d1d8e0; margin-bottom: 25px; font-size: 1.15rem; font-weight: 500; line-height: 1.8; }
+.about-list { list-style: none; margin-top: 25px; }
+.about-list li { color: #f0f4f8; margin-bottom: 12px; position: relative; padding-right: 30px; font-weight: 500; font-size: 1.05rem; }
+.about-list li::before { content: '✓'; position: absolute; right: 0; color: #4da6ff; font-weight: bold; font-size: 1.2rem; }
+.about-hours { background: rgba(255,255,255,0.08); padding: 30px; border-radius: 15px; min-width: 250px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
+.about-hours h3 { color: #fff; margin-bottom: 20px; font-size: 1.5rem; font-weight: 700; }
+.hours-row { display: flex; justify-content: space-between; color: #e0e6ed; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-weight: 600; font-size: 1.05rem; }
+
+/* ========================================= */
+/* خطوات الحجز (بدون دوائر) */
+/* ========================================= */
+.arch-steps { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin-top: 50px; }
+.arch-step { text-align: center; flex: 1; min-width: 150px; }
+.arch-step-img-wrap {
+  width: 110px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  transition: transform 0.3s ease;
+}
+.arch-step-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  mix-blend-mode: multiply;
+  padding: 5px;
+}
+.arch-step:hover .arch-step-img-wrap { transform: scale(1.1); }
+.arch-step p { color: #d1d8e0; font-size: 1.1rem; font-weight: 600; line-height: 1.6; max-width: 200px; margin: 0 auto; }
+
+/* ===== BOOKING FORM ===== */
+.booking-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 45px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  min-width: 350px;
+}
+.form-row { margin-bottom: 25px; }
+.form-row label { display: block; color: #e0e6ed; margin-bottom: 10px; font-weight: 700; font-size: 1rem; }
+.form-row input, .form-row select, .form-row textarea {
+  width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.1); color: #fff; font-family: inherit; font-size: 1.05rem; transition: 0.3s; font-weight: 500;
+}
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+  outline: none; border-color: #4da6ff; background: rgba(255,255,255,0.15); box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.2);
+}
+.form-row input::placeholder, .form-row textarea::placeholder { color: #8899aa; font-weight: 400; }
+.form-row-split { display: flex; gap: 20px; }
+.form-row-split > div { flex: 1; }
+.btn-block { width: 100%; text-align: center; padding: 18px; font-size: 1.15rem; background: #1e3c72; color: white; border: none; border-radius: 30px; cursor: pointer; transition: 0.3s; font-weight: 700; box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3); }
+.btn-block:hover { background: #2a5298; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(30, 60, 114, 0.4); }
+.form-message { margin-top: 15px; text-align: center; font-weight: 700; font-size: 1.05rem; }
+.form-message.success { color: #4da6ff; }
+.form-message.error { color: #ff6b6b; }
+
+/* ===== إصلاح ظهور الأوقات ===== */
+select option { background-color: #ffffff !important; color: #000000 !important; font-weight: 500; }
+select { color-scheme: light; }
+
+/* ===== FOOTER ===== */
+.site-footer {
+  background: #0a192f;
+  padding: 60px 0 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 80px;
+}
+.footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 40px; }
+.footer-brand { flex: 1; min-width: 200px; }
+.footer-brand span { font-size: 1.6rem; color: #fff; font-weight: 700; }
+.footer-brand strong { color: #4da6ff; }
+.footer-brand p { color: #c0cbd6; margin-top: 12px; font-weight: 500; font-size: 1.05rem; }
+.footer-social { flex: 1; min-width: 150px; }
+.footer-title { color: #fff; font-weight: 700; display: block; margin-bottom: 12px; font-size: 1.1rem; }
+.social-links { display: flex; gap: 20px; flex-wrap: wrap; }
+.social-links a { color: #c0cbd6; text-decoration: none; transition: 0.3s; font-weight: 600; font-size: 1rem; }
+.social-links a:hover { color: #4da6ff; }
+.footer-doctor { flex: 1; min-width: 150px; text-align: left; }
+.doctor-link { color: #4da6ff; text-decoration: none; font-weight: 700; transition: 0.3s; border: 1px solid rgba(77, 166, 255, 0.3); padding: 10px 20px; border-radius: 30px; display: inline-block; font-size: 1rem; }
+.doctor-link:hover { color: #fff; border-color: #4da6ff; background: rgba(77, 166, 255, 0.1); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px; text-align: center; color: #8899aa; font-size: 0.95rem; font-weight: 500; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .hero { flex-direction: column; text-align: center; gap: 40px; padding: 20px 0 40px; }
+  .hero-copy, .hero-actions { max-width: 100%; align-items: center; }
+  .hero-copy p { margin: 0 auto 30px; max-width: 100%; }
+  .main-nav { display: none; }
+  .header-btn { display: none; }
+  .clinic-card { padding: 20px; margin: 10px; width: calc(100% - 20px); min-height: auto; }
+  .about-inner, .booking-inner { flex-direction: column; }
+  .booking-card { min-width: 100%; }
+  .form-row-split { flex-direction: column; gap: 0; }
+  .hero-stats { justify-content: center; text-align: center; }
+  .hero-visual { margin: 20px 0; }
+  .hero-visual img { width: 180px; }
+}
+@media (max-width: 480px) {
+  .hero-copy h1 { font-size: 2.4rem; }
+  .section-title { font-size: 2rem; }
+}
+</style>
 </head>
 <body>
 
-<!-- ============ الهيدر ============ -->
-<header class="site-header">
-  <div class="container header-inner">
-    <a href="#top" class="brand">
-      <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M24 6C17 6 12 11 12 18c0 6 2 10 3 15 1 4 2 9 5 9s3-6 4-9c0.5-1.5 1.5-1.5 2 0 1 3 1 9 4 9s4-5 5-9c1-5 3-9 3-15 0-7-5-12-12-12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>عيادة <strong>ابتسامة</strong></span>
+<!-- ========================================= -->
+<!-- طبقة الانتقال بين الصفحات -->
+<!-- ========================================= -->
+<div id="page-transition" class="transition-overlay"></div>
+
+<!-- ========================================= -->
+<!-- الصفحة الرئيسية بتصميم السن الزجاجي -->
+<!-- ========================================= -->
+<div class="clinic-card">
+  <header class="site-header header">
+    <a href="#top" class="logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M12 6c-2.76 0-5 2.24-5 5s2.24 5 5 5 5 2.24 5 5-2.24 5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+      عيادة <strong>ابتسامة</strong>
     </a>
+    <!-- القائمة تعمل الآن -->
     <nav class="main-nav">
-      <a href="#services">الخدمات</a>
+      <a href="#services">خدماتنا</a>
       <a href="#about">عن العيادة</a>
       <a href="#steps">كيف تحجز</a>
       <a href="#contact">تواصل معنا</a>
     </nav>
-    <a href="#booking" class="btn btn-primary btn-sm">احجز موعدك</a>
-  </div>
-</header>
+    <a href="#booking" class="header-btn">احجز موعدك</a>
+  </header>
 
-<!-- ============ الهيرو ============ -->
-<section class="hero" id="top">
-  <div class="container hero-inner">
-    <div class="hero-copy">
-
-     
-
+  <section class="hero" id="top">
+    <div class="hero-copy animate-in">
       <span class="eyebrow">عيادة أسنان · رعاية موثوقة</span>
       <h1>ابتسامة واثقة تبدأ<br>من هنا</h1>
       <p class="hero-lead">
-        نُقدّم رعاية شاملة لأسنانك بأحدث التقنيات وأيدٍ خبيرة، مع إمكانية حجز موعدك
-        أونلاين في أقل من دقيقة، وتذكير تلقائي على واتساب حتى لا يفوتك موعدك.
+        نُقدّم رعاية شاملة لأسنانك بأحدث التقنيات وأيدٍ خبيرة، مع إمكانية حجز موعدك أونلاين.
       </p>
       <div class="hero-actions">
-        <a href="#booking" class="btn btn-primary">احجز موعدك الآن</a>
-        <a href="#services" class="btn btn-ghost">تصفّح خدماتنا</a>
+        <a href="#booking" class="btn-primary">احجز موعدك الآن</a>
+        <a href="#services" class="btn-ghost">تصفح خدماتنا</a>
       </div>
       <div class="hero-stats">
         <div><strong>+12</strong><span>سنة خبرة</span></div>
         <div><strong>+8,000</strong><span>مريض راضٍ</span></div>
-        <div><strong>6</strong><span>أيام عمل أسبوعياً</span></div>
+        <div><strong>6</strong><span>أيام عمل</span></div>
       </div>
     </div>
-    <div class="hero-visual" aria-hidden="true">
-      <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="160" cy="160" r="150" fill="var(--mint)"/>
-        <path d="M160 70c-38 0-64 26-64 64 0 26 8 44 13 66 4 18 9 40 22 40s13-26 18-40c2-6 6-6 8 0 5 14 5 40 18 40s18-22 22-40c5-22 13-40 13-66 0-38-26-64-64-64" stroke="var(--teal-dark)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <div class="hero-visual animate-in delay-1">
+      <img src="/images/tooth-real.png" alt="سن ثلاثي الأبعاد واقعي">
     </div>
-  </div>
-  <!-- فاصل قوسي على شكل ابتسامة -->
-  <svg class="smile-divider" viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,0 C360,100 1080,100 1440,0 L1440,100 L0,100 Z" fill="var(--bg-section)"/>
-  </svg>
-</section>
+  </section>
+</div>
 
-<!-- ============ الخدمات ============ -->
-<section class="section" id="services">
-  <div class="container">
-    <span class="eyebrow center">خدماتنا</span>
-    <h2 class="section-title center">كل ما تحتاجه ابتسامتك في مكان واحد</h2>
+<!-- ========================================= -->
+<!-- الأقسام (الروابط تعمل الآن) -->
+<!-- ========================================= -->
+
+<!-- قسم الخدمات -->
+<section class="section alt" id="services">
+  <div class="container" data-aos="fade-up" data-aos-duration="1000">
+    <span class="eyebrow center" style="text-align:center; display:block;">خدماتنا المتميزة</span>
+    <h2 class="section-title center" style="text-align:center;">رعاية شاملة لابتسامتك</h2>
     <div class="services-grid">
-
-      <article class="service-card">
-        <div class="service-icon">🪥</div>
-        <h3>تنظيف وتلميع الأسنان</h3>
-        <p>إزالة الجير والترسبات مع جلسة تلميع تعيد لأسنانك نصاعتها الطبيعية.</p>
-      </article>
-
-      <article class="service-card">
-        <div class="service-icon">✨</div>
-        <h3>تبييض الأسنان</h3>
-        <p>جلسات تبييض آمنة وفعّالة بنتائج تدوم لفترة أطول تحت إشراف طبي.</p>
-      </article>
-
-      <article class="service-card">
-        <div class="service-icon">🦷</div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+        <span class="service-icon">🦷</span>
         <h3>تقويم الأسنان</h3>
-        <p>تقويم معدني أو شفاف حسب حالتك، مع متابعة دورية لضمان أفضل نتيجة.</p>
-      </article>
-
-      <article class="service-card">
-        <div class="service-icon">🩹</div>
-        <h3>الحشوات التجميلية</h3>
-        <p>حشوات بلون الأسنان الطبيعي لعلاج التسوس دون التأثير على المظهر.</p>
-      </article>
-
-      <article class="service-card">
-        <div class="service-icon">⚙️</div>
+        <p>حلول تقويم حديثة وجميلة لابتسامة مثالية.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+        <span class="service-icon">✨</span>
+        <h3>تبييض الأسنان</h3>
+        <p>تقنيات تبييض آمنة وفعالة لنتائج مبهرة.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+        <span class="service-icon">🛡️</span>
         <h3>زراعة الأسنان</h3>
-        <p>حلول تعويضية دائمة للأسنان المفقودة بأحدث تقنيات الزراعة.</p>
-      </article>
-
-      <article class="service-card">
-        <div class="service-icon">🚨</div>
-        <h3>طوارئ الأسنان</h3>
-        <p>استقبال الحالات العاجلة وآلام الأسنان الحادة في أسرع وقت ممكن.</p>
-      </article>
-
+        <p>استبدال الأسنان المفقودة بأحدث تقنيات الزراعة.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ عن العيادة ============ -->
+<!-- عن العيادة -->
 <section class="section alt" id="about">
   <div class="container about-inner">
-    <div class="about-copy">
+    <div class="about-copy" data-aos="fade-up" data-aos-duration="1000">
       <span class="eyebrow">عن العيادة</span>
       <h2 class="section-title">فريق طبي تثق به أسرتك بالكامل</h2>
       <p>
@@ -130,7 +486,7 @@
         <li>تذكير تلقائي بموعدك عبر واتساب</li>
       </ul>
     </div>
-    <div class="about-hours">
+    <div class="about-hours" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="150">
       <h3>ساعات العمل</h3>
       <div class="hours-row"><span>السبت - الخميس</span><span>9:00 ص - 9:00 م</span></div>
       <div class="hours-row"><span>الجمعة</span><span>مغلق</span></div>
@@ -138,53 +494,53 @@
   </div>
 </section>
 
-<!-- ============ خطوات الحجز - على شكل قوس أسنان ============ -->
+<!-- خطوات الحجز (بدون دوائر) -->
 <section class="section" id="steps">
   <div class="container">
-    <span class="eyebrow center">خطوات بسيطة</span>
-    <h2 class="section-title center">كيف تحجز موعدك؟</h2>
+    <div data-aos="fade-up" data-aos-duration="800">
+      <span class="eyebrow center" style="display:block; text-align:center;">خطوات بسيطة</span>
+      <h2 class="section-title center" style="text-align:center;">كيف تحجز موعدك؟</h2>
+    </div>
 
     <div class="arch-steps">
-      <div class="arch-step">
-        <div class="arch-tooth">1</div>
+      <div class="arch-step" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+        <div class="arch-step-img-wrap"><img src="/images/tooth-real.png" alt="سن"></div>
         <p>اختر التاريخ والوقت المناسبين لك</p>
       </div>
-      <div class="arch-step">
-        <div class="arch-tooth">2</div>
+      <div class="arch-step" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+        <div class="arch-step-img-wrap"><img src="/images/tooth-real.png" alt="سن"></div>
         <p>أدخل اسمك ورقم هاتفك</p>
       </div>
-      <div class="arch-step">
-        <div class="arch-tooth">3</div>
+      <div class="arch-step" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+        <div class="arch-step-img-wrap"><img src="/images/tooth-real.png" alt="سن"></div>
         <p>أكّد الحجز واستلم رسالة تأكيد</p>
       </div>
-      <div class="arch-step">
-        <div class="arch-tooth">4</div>
+      <div class="arch-step" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+        <div class="arch-step-img-wrap"><img src="/images/tooth-real.png" alt="سن"></div>
         <p>استلم تذكير واتساب قبل موعدك</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ نموذج الحجز ============ -->
+<!-- نموذج الحجز -->
 <section class="section alt" id="booking">
   <div class="container booking-inner">
-    <div class="booking-intro">
+    <div class="booking-intro" data-aos="fade-up" data-aos-duration="1000">
       <span class="eyebrow">احجز الآن</span>
       <h2 class="section-title">موعدك على بُعد خطوة واحدة</h2>
-      <p>عبّئ البيانات التالية وسنؤكد لك الموعد فوراً، مع تذكير تلقائي على واتساب قبل الموعد.</p>
+      <p style="color:#d1d8e0; font-size:1.15rem; font-weight:500;">عبّئ البيانات التالية وسنؤكد لك الموعد فوراً، مع تذكير تلقائي على واتساب قبل الموعد.</p>
     </div>
 
-    <form id="booking-form" class="booking-card" novalidate>
+    <form id="booking-form" class="booking-card" novalidate data-aos="fade-up" data-aos-duration="1000" data-aos-delay="150">
       <div class="form-row">
         <label for="patientName">الاسم الكامل</label>
         <input type="text" id="patientName" name="patientName" placeholder="مثال: أحمد محمد" required minlength="2">
       </div>
-
       <div class="form-row">
         <label for="phone">رقم الهاتف (مع رمز الدولة)</label>
         <input type="tel" id="phone" name="phone" placeholder="مثال: +9611234567" required>
       </div>
-
       <div class="form-row form-row-split">
         <div>
           <label for="date">التاريخ</label>
@@ -197,7 +553,6 @@
           </select>
         </div>
       </div>
-
       <div class="form-row">
         <label for="service">نوع الخدمة</label>
         <select id="service" name="service">
@@ -210,25 +565,23 @@
           <option value="طوارئ">طوارئ / ألم حاد</option>
         </select>
       </div>
-
       <div class="form-row">
         <label for="notes">ملاحظات إضافية (اختياري)</label>
         <textarea id="notes" name="notes" rows="3" placeholder="أي تفاصيل تودّ إخبارنا بها"></textarea>
       </div>
-
-      <button type="submit" class="btn btn-primary btn-block">تأكيد الحجز</button>
+      <button type="submit" class="btn-block">تأكيد الحجز</button>
       <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
     </form>
   </div>
 </section>
 
-<!-- ============ تواصل معنا ============ -->
+<!-- تواصل معنا -->
 <footer class="site-footer" id="contact">
   <div class="container footer-inner">
     <div class="footer-brand">
       <span>عيادة <strong>ابتسامة</strong></span>
-      <p>عنوان العيادة: شارع الاستقلال، طرابلس، لبنان</p>
-      <p>هاتف العيادة: 01-234567</p>
+      <p>عنوان العيادة: لبنان.الهرمل-الدورة</p>
+      <p>هاتف العيادة: 08201201</p>
     </div>
     <div class="footer-social">
       <span class="footer-title">تابعنا</span>
@@ -244,9 +597,59 @@
   </div>
   <div class="container footer-bottom">
     <p>© 2026 عيادة ابتسامة. جميع الحقوق محفوظة.</p>
+    <br><P>Designed & developed by Jawad Abdine</P>
   </div>
 </footer>
 
 <script src="js/main.js"></script>
+
+<!-- ========================================= -->
+<!-- كود الانتقال بين الصفحات + مكتبة AOS -->
+<!-- ========================================= -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+// تفعيل مكتبة AOS
+AOS.init({
+    once: false, // السماح بتكرار الأنيميشن عند التمرير لأعلى وأسفل
+    mirror: true, // إعادة الأنيميشن عند الرجوع للقسم مرة أخرى
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const transitionOverlay = document.getElementById('page-transition');
+    const links = document.querySelectorAll('a');
+    
+    // إضافة تأثير الانتقال عند الضغط على الروابط
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // تجاهل الروابط التي تبدأ بـ # (لأنها داخل الصفحة ولا نحتاج transition لها)
+            if (this.getAttribute('href').startsWith('#')) {
+                return; // توقف هنا، دع المتصفح يقوم بالقفز بشكل طبيعي
+            }
+            // تجاهل الروابط التي تفتح في نافذة جديدة
+            if (this.getAttribute('target') === '_blank') {
+                return;
+            }
+            
+            e.preventDefault();
+            const targetUrl = this.getAttribute('href');
+            
+            // تشغيل أنيميشن الخروج
+            transitionOverlay.classList.add('active');
+            
+            // الانتظار حتى انتهاء الأنيميشن ثم الذهاب للصفحة الجديدة
+            setTimeout(function() {
+                window.location.href = targetUrl;
+            }, 600); // 600ms نفس مدة الـ transition في CSS
+        });
+    });
+    
+    // عند تحميل الصفحة الجديدة، تشغيل أنيميشن الدخول
+    window.addEventListener('pageshow', function() {
+        // إزالة أي تأثير سابق
+        transitionOverlay.classList.remove('active');
+    });
+});
+</script>
+
 </body>
 </html>

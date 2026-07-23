@@ -5,6 +5,16 @@ const timeSelect = document.getElementById('time');
 const form = document.getElementById('booking-form');
 const formMessage = document.getElementById('form-message');
 
+const toothImage = document.getElementById('tooth-image');
+if (toothImage) {
+  toothImage.style.background = 'transparent';
+  toothImage.style.backgroundColor = 'transparent';
+  toothImage.style.setProperty('background', 'transparent', 'important');
+  
+  
+  toothImage.style.mixBlendMode = 'multiply';
+}
+
 // أوقات العمل الافتراضية للواجهة (يجب أن تطابق CLINIC_OPEN_HOUR/CLOSE_HOUR في السيرفر)
 const OPEN_HOUR = 9;
 const CLOSE_HOUR = 21;
@@ -125,4 +135,61 @@ form.addEventListener('submit', async (e) => {
     submitBtn.disabled = false;
     submitBtn.textContent = 'تأكيد الحجز';
   }
+});
+// ===== صورة السن المتحركة =====
+document.addEventListener('DOMContentLoaded', function() {
+  const toothImage = document.getElementById('tooth-image');
+  if (!toothImage) return;
+
+  let rotation = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startRotation = 0;
+
+  // دوران تلقائي
+  let autoRotate = setInterval(() => {
+    if (!isDragging) {
+      rotation = (rotation + 0.3) % 360;
+      toothImage.style.transform = `rotateY(${rotation}deg)`;
+    }
+  }, 50);
+
+  toothImage.addEventListener('mousedown', function(e) {
+    isDragging = true;
+    startX = e.clientX;
+    startRotation = rotation;
+    this.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    const diff = (e.clientX - startX) * 0.5;
+    rotation = startRotation + diff;
+    toothImage.style.transform = `rotateY(${rotation}deg)`;
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (isDragging) {
+      isDragging = false;
+      toothImage.style.cursor = 'grab';
+    }
+  });
+
+  // دعم اللمس للأجهزة المحمولة
+  toothImage.addEventListener('touchstart', function(e) {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    startRotation = rotation;
+  });
+
+  toothImage.addEventListener('touchmove', function(e) {
+    if (!isDragging) return;
+    const diff = (e.touches[0].clientX - startX) * 0.5;
+    rotation = startRotation + diff;
+    toothImage.style.transform = `rotateY(${rotation}deg)`;
+  });
+
+  toothImage.addEventListener('touchend', function() {
+    isDragging = false;
+  });
 });

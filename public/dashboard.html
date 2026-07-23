@@ -4,20 +4,173 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة تحكم الطبيب | عيادة ابتسامة</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/dashboard.css">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: #0a192f;
+  color: #fff;
+  min-height: 100vh;
+}
+.hidden { display: none !important; }
+
+/* ===== شاشة تسجيل الدخول ===== */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a192f;
+  padding: 20px;
+}
+.login-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 40px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+.login-brand { text-align: center; margin-bottom: 10px; }
+.login-brand h1 { font-size: 1.5rem; color: #4da6ff; }
+.form-row { display: flex; flex-direction: column; gap: 8px; }
+.form-row label { font-weight: 600; color: #ddd; }
+.form-row input {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+}
+.form-row input:focus { outline: none; border-color: #4da6ff; }
+.btn-block { width: 100%; padding: 14px; border: none; border-radius: 10px; background: #1e3c72; color: #fff; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.btn-block:hover { background: #2a5298; }
+.form-message { text-align: center; font-weight: bold; color: #ff6b6b; }
+
+/* ===== لوحة التحكم ===== */
+.dash-header {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.dash-header-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 20px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+}
+.dash-header .brand { font-size: 1.2rem; font-weight: bold; color: #fff; }
+.dash-header .brand strong { color: #4da6ff; }
+.dash-header button {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; padding: 8px 18px; border-radius: 10px; cursor: pointer; transition: 0.3s;
+}
+.dash-header button:hover { background: rgba(255,255,255,0.2); }
+
+/* ===== الإشعارات ===== */
+#notification-box { position: relative; display: inline-block; }
+#notification-btn { position: relative; }
+#notification-count {
+  position: absolute; top: -8px; right: -8px;
+  background: #ff6b6b; color: white; border-radius: 50%;
+  padding: 2px 8px; font-size: 12px; font-weight: bold;
+}
+#notifications-list {
+  display: none; position: absolute; top: 100%; right: 0;
+  background: #1a2a4a; border: 1px solid rgba(255,255,255,0.1);
+  padding: 15px; width: 320px; border-radius: 15px;
+  z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+#notifications-list div { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px 0; }
+#notifications-list div:last-child { border-bottom: none; }
+#notifications-list button {
+  background: #25D366; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; margin-top: 5px; width: 100%;
+}
+
+/* ===== المحتوى الرئيسي ===== */
+.dash-main { max-width: 1200px; margin: 0 auto; padding: 30px 20px 60px; }
+
+/* ===== الفلاتر ===== */
+.dash-toolbar {
+  display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; align-items: flex-end;
+}
+.filter-group { display: flex; flex-direction: column; gap: 5px; }
+.filter-group label { font-size: 0.85rem; color: #aaa; font-weight: bold; }
+.filter-group input, .filter-group select {
+  padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1); color: #fff; font-family: inherit;
+}
+.filter-group input:focus, .filter-group select:focus { outline: none; border-color: #4da6ff; }
+.dash-toolbar button {
+  padding: 10px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1); color: #fff; cursor: pointer; transition: 0.3s;
+}
+.dash-toolbar button:hover { background: rgba(255,255,255,0.2); }
+
+/* ===== الإحصائيات ===== */
+.dash-stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;
+}
+.stat-card {
+  background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05);
+}
+.stat-card strong { display: block; font-size: 2rem; color: #4da6ff; }
+.stat-card span { font-size: 0.9rem; color: #aaa; }
+
+/* ===== الجدول ===== */
+.table-wrap {
+  background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05); overflow-x: auto;
+}
+.appt-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+.appt-table th, .appt-table td { padding: 15px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.appt-table th { background: rgba(255,255,255,0.1); color: #4da6ff; font-weight: bold; }
+.appt-table td { color: #ddd; }
+.appt-table tr:hover { background: rgba(255,255,255,0.05); }
+.empty-row { text-align: center; padding: 30px; color: #888; }
+
+/* ===== البادجات ===== */
+.badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: bold; }
+.badge-confirmed { background: rgba(77, 166, 255, 0.2); color: #4da6ff; }
+.badge-done { background: rgba(46, 213, 115, 0.2); color: #2ed573; }
+.badge-cancelled { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+
+/* ===== الأزرار داخل الجدول ===== */
+.row-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+.row-actions button {
+  padding: 4px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.8rem;
+  background: rgba(255,255,255,0.1); color: #fff;
+}
+.row-actions button:hover { background: rgba(255,255,255,0.2); }
+.row-actions button.danger { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+.row-actions button.danger:hover { background: rgba(255, 107, 107, 0.4); }
+
+@media (max-width: 768px) {
+  .dash-header-inner { flex-direction: column; align-items: stretch; }
+  .dash-toolbar { flex-direction: column; }
+  .filter-group { width: 100%; }
+  .filter-group input, .filter-group select { width: 100%; }
+  #notifications-list { width: calc(100vw - 40px); right: -20px; }
+}
+</style>
 </head>
-<body class="dashboard-body">
+<body>
 
 <!-- ============ شاشة تسجيل الدخول ============ -->
 <div id="login-screen" class="login-screen">
   <form id="login-form" class="login-card">
     <div class="login-brand">
-      <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M24 6C17 6 12 11 12 18c0 6 2 10 3 15 1 4 2 9 5 9s3-6 4-9c0.5-1.5 1.5-1.5 2 0 1 3 1 9 4 9s4-5 5-9c1-5 3-9 3-15 0-7-5-12-12-12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
       <h1>لوحة تحكم الطبيب</h1>
     </div>
     <div class="form-row">
@@ -28,51 +181,35 @@
       <label for="password">كلمة المرور</label>
       <input type="password" id="password" required autocomplete="current-password">
     </div>
-    <button type="submit" class="btn btn-primary btn-block">تسجيل الدخول</button>
-    <p id="login-message" class="form-message error"></p>
+    <button type="submit" class="btn-block">تسجيل الدخول</button>
+    <p id="login-message" class="form-message"></p>
   </form>
 </div>
 
 <!-- ============ لوحة التحكم ============ -->
-<div id="dashboard-screen" class="dashboard-screen hidden">
+<div id="dashboard-screen" class="hidden">
   <header class="dash-header">
-    <div class="container dash-header-inner">
+    <div class="dash-header-inner">
       <span class="brand">عيادة <strong>ابتسامة</strong> — لوحة الطبيب</span>
-      <button id="logout-btn" class="btn btn-ghost btn-sm">تسجيل الخروج</button>
-<button id="patients-btn">
-    المرضى
-</button>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <button id="patients-btn">المرضى</button>
+        
+        <div id="notification-box">
+          <button id="notification-btn">🔔 الإشعارات <span id="notification-count"></span></button>
+          <div id="notifications-list"></div>
+        </div>
+
+        <button id="logout-btn">تسجيل الخروج</button>
+      </div>
     </div>
   </header>
-<div id="notification-box" style="
-    position:relative;
-    display:inline-block;
-    cursor:pointer;
-    margin:20px;
-">
 
-<button id="notification-btn">
-🔔 الإشعارات
-<span id="notification-count"></span>
-</button>
-
-<div id="notifications-list" style="
-    display:none;
-    position:absolute;
-    background:white;
-    border:1px solid #ccc;
-    padding:15px;
-    width:300px;
-    right:0;
-    z-index:1000;
-    border-radius:10px;
-">
-</div>
-
-</div>
-
-  <main class="container dash-main">
+  <main class="dash-main">
     <div class="dash-toolbar">
+      <div class="filter-group">
+        <label for="filter-search">بحث</label>
+        <input type="text" id="filter-search" placeholder="اسم المريض أو الهاتف">
+      </div>
       <div class="filter-group">
         <label for="filter-date">التاريخ</label>
         <input type="date" id="filter-date">
@@ -84,17 +221,10 @@
           <option value="confirmed">مؤكد</option>
           <option value="done">تم الكشف</option>
           <option value="cancelled">ملغى</option>
-<div class="filter-group">
-  <label for="filter-search">بحث</label>
-  <input 
-    type="text" 
-    id="filter-search" 
-    placeholder="اسم المريض أو الهاتف">
-</div>
         </select>
       </div>
-      <button id="refresh-btn" class="btn btn-ghost btn-sm">تحديث</button>
-      <button id="clear-filters-btn" class="btn btn-ghost btn-sm">مسح الفلاتر</button>
+      <button id="refresh-btn">تحديث</button>
+      <button id="clear-filters-btn">مسح الفلاتر</button>
     </div>
 
     <div class="dash-stats" id="dash-stats"></div>
@@ -110,7 +240,7 @@
             <th>الخدمة</th>
             <th>الحالة</th>
             <th>تذكير</th>
-            <th>إجراءات</th>
+            <th>الإجراءات</th>
           </tr>
         </thead>
         <tbody id="appt-tbody">
