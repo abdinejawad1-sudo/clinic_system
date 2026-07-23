@@ -260,6 +260,7 @@ async function loadNotifications(){
 
     const data = await res.json();
 
+     console.log(data);
 
     const list =
     document.getElementById("notifications-list");
@@ -347,8 +348,11 @@ function sendReminder(id){
         return;
     }
 
+let phone = appointment.phone.toString().replace(/\D/g, "");
 
-    let phone = appointment.phone;
+if (phone.startsWith("0")) {
+    phone = "961" + phone.substring(1);
+}
 
 
     let message = 
@@ -361,9 +365,7 @@ function sendReminder(id){
 شكراً لزيارتكم.`;
 
 
-    const url =
-    `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-
+   const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`; window.open(url, "_blank");
 
     window.open(url,"_blank");
 

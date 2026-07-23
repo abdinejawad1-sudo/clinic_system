@@ -11,13 +11,13 @@ router.get("/", auth, async (req, res) => {
     try {
 
         const result = await pool.query(`
-        
         SELECT
-            appointments.id,
-            appointments.appt_date,
-            appointments.appt_time,
-            appointments.service,
-            patients.name AS patient_name
+    appointments.id,
+    appointments.appt_date,
+    appointments.appt_time,
+    appointments.service,
+    patients.name AS patient_name,
+    patients.phone
 
         FROM appointments
 
