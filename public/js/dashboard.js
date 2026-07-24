@@ -2,48 +2,9 @@ const newDate = document.getElementById("new-date");
 const newTime = document.getElementById("new-time");
 
 
-newDate.addEventListener("change", async ()=>{
-
-
-    const date = newDate.value;
-
-
-    if(!date){
-        return;
-    }
-
-
-    const res = await fetch(`/api/appointments/available-times?date=${date}`);
-
-    const times = await res.json();
-
-
-    newTime.innerHTML="";
-
-
-    if(times.length === 0){
-
-        newTime.innerHTML =
-        `<option>لا يوجد أوقات متاحة</option>`;
-
-        return;
-
-    }
-
-
-    times.forEach(time=>{
-
-        const option=document.createElement("option");
-
-        option.value=time;
-        option.textContent=time;
-
-        newTime.appendChild(option);
-
-    });
-
-
-});
+document
+    .getElementById("new-date")
+    .addEventListener("change", loadAvailableTimesForDoctor);
 const filterSearch = document.getElementById('filter-search');
 const API_BASE = '/api';
 const TOKEN_KEY = 'clinic_doctor_token';
@@ -293,7 +254,8 @@ async function loadNotifications(){
 
     const token = localStorage.getItem("clinic_doctor_token");
 
-
+const list = document.getElementById("notifications-list");
+list.innerHTML = "جارٍ التحميل...";
     const res = await fetch(
         "/api/notifications",
         {
@@ -308,9 +270,7 @@ async function loadNotifications(){
 
      console.log(data);
 
-    const list =
-    document.getElementById("notifications-list");
-
+  
 
     if(data.length === 0){
 
@@ -356,21 +316,20 @@ window.notifications = data;
 
 
 // فتح وإغلاق القائمة
+document.getElementById("notification-btn").addEventListener("click", async () => {
 
-document
-.getElementById("notification-btn")
-.addEventListener("click",()=>{
+    const box = document.getElementById("notifications-list");
 
-    const box =
-    document.getElementById("notifications-list");
+    if (box.style.display === "block") {
+        box.style.display = "none";
+        return;
+    }
 
+    box.innerHTML = "جارٍ تحميل الإشعارات...";
 
-    box.style.display =
-    box.style.display==="none"
-    ?
-    "block"
-    :
-    "none";
+    box.style.display = "block";
+
+    await loadNotifications();
 
 });
 
@@ -653,4 +612,43 @@ if (appointmentModal) {
 
     });
 
+}
+async function loadAvailableTimesForDoctor() {
+
+    const date = document.getElementById("new-date").value;
+    if (!date) return;
+
+    const res = await fetch(`/api/appointments/available-times?date=${date}`);
+    const times = await res.json();
+
+    const select = document.getElementById("new-time");
+    select.innerHTML = "";
+
+    const today = new Date().toISOString().split("T")[0];
+    const now = new Date();
+
+    times.forEach(time => {
+
+        if (date === today) {
+
+            const [hour, minute] = time.split(":");
+
+            const appointmentTime = new Date();
+            appointmentTime.setHours(hour, minute, 0, 0);
+
+            if (appointmentTime <= now) {
+                return;
+            }
+        }
+
+        select.innerHTML += `
+            <option value="${time}">
+                ${time}
+            </option>
+        `;
+    });
+
+    if (select.options.length === 0) {
+        select.innerHTML = `<option value="">لا توجد أوقات متاحة</option>`;
+    }
 }
